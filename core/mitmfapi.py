@@ -84,7 +84,7 @@ class mitmfapi(ConfigWatcher):
                     ProxyPlugins().remove_plugin(p)
                     return json.dumps({"plugin": plugin, "response": "success"})
 
-        return json.dumps({"plugin": plugin, "response": "failed"})
+        return (json.dumps({"plugin": plugin, "response": "failed"}), {'Content-Type': 'application/json'})
 
     def startFlask(self):
         app.run(debug=False, host=self.host, port=self.port)
