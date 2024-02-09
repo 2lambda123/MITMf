@@ -37,12 +37,24 @@ class mitmfapi(ConfigWatcher):
     __shared_state = {}
 
     def __init__(self):
+        """Creates an instance of the class with shared state.
+        Parameters:
+            - self (object): Instance of the class.
+        Returns:
+            - None: Does not return anything.
+        Processing Logic:
+            - Sets the instance's dictionary to the shared state.
+            - Sets the instance's host to the value from the config file.
+            - Sets the instance's port to the integer value from the config file."""
+        
         self.__dict__ = self.__shared_state
         self.host = self.config['MITMf']['MITMf-API']['host']
         self.port = int(self.config['MITMf']['MITMf-API']['port'])
 
     @app.route("/")
     def getPlugins():
+        """"""
+        
         # example: http://127.0.0.1:9999/
         pdict = {}
         
@@ -61,6 +73,8 @@ class mitmfapi(ConfigWatcher):
 
     @app.route("/<plugin>")
     def getPluginStatus(plugin):
+        """"""
+        
         # example: http://127.0.0.1:9090/cachekill
         for p in ProxyPlugins().plugin_list:
             if plugin == p.name:
@@ -70,6 +84,8 @@ class mitmfapi(ConfigWatcher):
 
     @app.route("/<plugin>/<status>")
     def setPluginStatus(plugin, status):
+        """"""
+        
         # example: http://127.0.0.1:9090/cachekill/1 # enabled
         # example: http://127.0.0.1:9090/cachekill/0 # disabled
         if status == "1":
@@ -87,6 +103,8 @@ class mitmfapi(ConfigWatcher):
         return (json.dumps({"plugin": plugin, "response": "failed"}), {'Content-Type': 'application/json'})
 
     def startFlask(self):
+        """"""
+        
         app.run(debug=False, host=self.host, port=self.port)
 
     #def start(self):
@@ -95,6 +113,8 @@ class mitmfapi(ConfigWatcher):
     #    api_thread.start()
 
     def start(self):
+        """"""
+        
         api_thread = threading.Thread(name='mitmfapi', target=self.startFlask)
         api_thread.setDaemon(True)
         api_thread.start()
